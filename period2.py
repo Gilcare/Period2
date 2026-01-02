@@ -304,12 +304,14 @@ def chatbot():
         # Adding torch_dtype="auto" or "float16" speeds up GPU inference
         return pipeline("text-generation", model="Qwen/Qwen2.5-0.5B-Instruct", dtype=torch.float16)
     pipe = load_pipeline()
+    wi
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+    with st.empty():
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
             
     # ... (History initialization and display chats) ...
     if user_input := st.chat_input("How can I help you?"):
