@@ -344,6 +344,8 @@ def chatbot():
 # MAIN APP
 # -------------------------------
 def landing_page():
+    st.markdown('<h1 style="color:#FF46A2; text-align: center;">PeriodIQ✨</h1>', unsafe_allow_html=True)
+    #st.divider()  
     tab1, tab2, tab3, tabs4 = st.tabs(["📝 Today", "📊 Metrics", "🧠 Insights","✨Ask Kyma"])
 
     with tab1:
