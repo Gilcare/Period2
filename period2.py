@@ -1,9 +1,13 @@
-import streamlit as st 
-from pymongo import MongoClient
-from datetime import date
 import pandas as pd
-from datetime import datetime, timedelta
 import plotly.express as px
+import torch
+import streamlit as st
+from datetime import date
+from datetime import datetime, timedelta
+from pymongo import MongoClient
+from threading import Thread
+from transformers import pipeline, TextIteratorStreamer
+
 
 
 #MongoDB access
@@ -293,13 +297,54 @@ def symptoms_insights():
         st.warning("No logs available for this user.")
 
                  
+# Function to create chatbot
+def chatbot():
+    @st.cache_resource
+    def load_pipeline():
+        # Adding torch_dtype="auto" or "float16" speeds up GPU inference
+        return pipeline("text-generation", model="Qwen/Qwen2.5-0.5B-Instruct", dtype=torch.float16)
+    pipe = load_pipeline()
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+            
+    # ... (History initialization and display chats) ...
+    if user_input := st.chat_input("How can I help you?"):
+        st.session_state.messages.append({"role": "user", "content": user_input})
+    with st.chat_message("user"):
+        st.markdown(user_input)
+    with st.chat_message("assistant"):
+        # Setup for streaming
+        streamer = TextIteratorStreamer(pipe.tokenizer, skip_prompt=True, skip_special_tokens=True)
+        
+        # Prepare arguments
+        messages = st.session_state.messages # Use full history for context
+        generation_kwargs = dict(
+            text_inputs=messages, 
+            streamer=streamer,
+            max_new_tokens=512,
+            do_sample=True,
+            temperature=0.7,
+            top_p=0.9
+        )
+        # Run generation in a background thread to prevent UI blocking
+        thread = Thread(target=pipe, kwargs=generation_kwargs)
+        thread.start()
+
+        # Display the stream
+        full_response = st.write_stream(streamer)
+    st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 
+    
 # -------------------------------
 # MAIN APP
 # -------------------------------
 def landing_page():
-    tab1, tab2, tab3 = st.tabs(["📝 Today", "📊 Metrics", "🧠 Insights"])
+    tab1, tab2, tab3, tabs4 = st.tabs(["📝 Today", "📊 Metrics", "🧠 Insights","✨Ask Kyma"])
 
     with tab1:
         with st.expander("**How are you feeling today?**", expanded=False):
@@ -309,6 +354,9 @@ def landing_page():
     with tab3:
         symptoms_insights()
         insights_tab()
+    with tabs4:
+        chatbot()
+
 
 def main():
     if not st.session_state.logged_in:
