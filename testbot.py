@@ -7,7 +7,7 @@ import streamlit as st
 from datetime import datetime
 from dotenv import load_dotenv
 
-
+from parlant.sdk.services.nlp.litellm_service import LiteLLMService
 #HUGGINGFACE_API_KEY = st.secrets.huggingface_api_key
 #LITELLM_API_KEY = st.secrets.litellm_api_key
 LITELLM_PROVIDER_MODEL_NAME="huggingface/deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
@@ -99,7 +99,10 @@ async def create_scheduling_journey(server: p.Server, agent: p.Agent) -> p.Journ
 
 # Set Up Parlant Server To Run Agent
 async def initialize_parlant():
-    server = p.Server(nlp_service=p.NLPServices.litellm)
+    nlp_services = LiteLLMService(
+        model_name=LITELLM_PROVIDER_MODEL_NAME)
+    os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1" 
+    server = p.Server(nlp_service=nlp_services)
     await server.__aenter__()
       
     agent = await server.create_agent(
