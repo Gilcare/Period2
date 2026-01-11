@@ -1,3 +1,4 @@
+einops
 huggingface_hub
 langchain
 langchain-huggingface
@@ -8,4 +9,4 @@ parlant
 pymongo
 plotly
 torch
-transformers
+transformers>=4.35.0
