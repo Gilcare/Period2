@@ -15,8 +15,20 @@ from testbot import initialize_parlant, get_response
 #MongoDB access
 db_access = st.secrets.mongo_db_key
 
-LITELLM_API_KEY = st.secrets.litellm_api_key
-HUGGINGFACE_API_KEY = st.secrets.huggingface_api_key
+import os
+import streamlit as st
+
+# Load from Streamlit secrets
+os.environ["LITELLM_PROVIDER_API_KEY"] = st.secrets["huggingface_api_key"]
+
+# Optional but recommended
+os.environ["HUGGINGFACE_API_KEY"] = st.secrets["huggingface_api_key"]
+
+# Model
+os.environ["LITELLM_PROVIDER_MODEL_NAME"] = (
+    "huggingface/deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
+)
+
 
 # -------------------------------
 # DATABASE SETUP
