@@ -7,9 +7,11 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
-os.environ["HUGGINGFACE_API_KEY"]=" "
+
+HUGGINGFACE_API_KEY = st.secrets.huggingface_api_key
+LITELLM_API_KEY = st.secrets.litellm_api_key
 os.environ["LITELLM_PROVIDER_MODEL_NAME"]="huggingface/deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
-os.environ["LITELLM_PROVIDER_API_KEY"] = " "
+
 
 async def add_domain_glossary(agent: p.Agent) -> None:
     await agent.create_term(
