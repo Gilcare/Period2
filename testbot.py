@@ -7,7 +7,7 @@ import streamlit as st
 from datetime import datetime
 from dotenv import load_dotenv
 
-from parlant.sdk.services.nlp.litellm_service import LiteLLMService
+from parlant.sdk import NLPServices, LiteLLMService, Server
 #HUGGINGFACE_API_KEY = st.secrets.huggingface_api_key
 #LITELLM_API_KEY = st.secrets.litellm_api_key
 LITELLM_PROVIDER_MODEL_NAME="huggingface/deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
