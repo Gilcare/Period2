@@ -98,12 +98,8 @@ async def create_scheduling_journey(server: p.Server, agent: p.Agent) -> p.Journ
    return journey
 
 # Set Up Parlant Server To Run Agent
-async def initialize_parlant():
-    nlp_services = LiteLLMService(
-        model_name=LITELLM_PROVIDER_MODEL_NAME)
-    os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1" 
-    server = p.Server(nlp_service=nlp_services)
-    await server.__aenter__()
+async def initialize_parlant() -> None:
+    async with p.Server(nlp_service=p.NLPServices.litellm) as server:
       
     agent = await server.create_agent(
            name = "Kyma",
