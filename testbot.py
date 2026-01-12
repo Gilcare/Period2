@@ -8,7 +8,7 @@ from datetime import datetime
 #HUGGINGFACE_API_KEY = st.secrets.huggingface_api_key
 #LITELLM_API_KEY = st.secrets.litellm_api_key
 #LITELLM_PROVIDER_MODEL_NAME="huggingface/deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
-LITELLM_PROVIDER_MODEL_NAME = "huggingface/Qwen/Qwen3-8B-Instruct"
+LITELLM_PROVIDER_MODEL_NAME = "huggingface/Qwen/Qwen3-0.6B"
 
 
 
