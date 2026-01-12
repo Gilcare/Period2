@@ -98,8 +98,8 @@ async def create_scheduling_journey(server: p.Server, agent: p.Agent) -> p.Journ
 
 # Set Up Parlant Server To Run Agent
 async def initialize_parlant() -> tuple:
-    server = p.Server(nlp_service=p.NLPServices.litellm)
-    await server.start()
+    server_cm = p.Server(nlp_service=p.NLPServices.litellm)
+    server = await server_cm.__aenter__()
     
     agent = await server.create_agent(
            name="Kyma",
