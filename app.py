@@ -24,7 +24,7 @@ os.environ["HUGGINGFACE_API_KEY"] = st.secrets["huggingface_api_key"]
 
 # Model
 os.environ["LITELLM_PROVIDER_MODEL_NAME"] = (
-    "huggingface/deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
+    "huggingface/Qwen/Qwen3-0.6B"
 )
 # Embeddings
 os.environ["PARLANT_EMBEDDING_MODEL"] = (
