@@ -5,8 +5,8 @@ import streamlit as st
 from datetime import datetime
 
 
-#HUGGINGFACE_API_KEY = st.secrets.huggingface_api_key
-#LITELLM_API_KEY = st.secrets.litellm_api_key
+HUGGINGFACE_API_KEY = st.secrets.huggingface_api_key
+LITELLM_API_KEY = st.secrets.litellm_api_key
 #LITELLM_PROVIDER_MODEL_NAME="huggingface/deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
 LITELLM_PROVIDER_MODEL_NAME = "huggingface/Qwen/Qwen3-0.6B"
 
@@ -97,27 +97,22 @@ async def create_scheduling_journey(server: p.Server, agent: p.Agent) -> p.Journ
 
 # Set Up Parlant Server To Run Agent
 async def initialize_parlant() -> None:
-    async with p.Server(nlp_service=p.NLPServices.litellm) as server:
+    nlp_service_instance = LiteLLMService(
+        model_name=LITELLM_PROVIDER_MODEL_NAME,
+        api_key=LITELLM_API_KEY# Optional: if not set in environment
+    )
+    async with p.Server(nlp_service=nlp_service_instance) as server:
         agent = await server.create_agent(
-           name = "Kyma",
+           name="Kyma",
            description="Is empathetic and calming to the patient."
-          )
+        )
       
-        # Add domain glossary & scheduling guideline to agent
         await add_domain_glossary(agent)
         await create_scheduling_journey(server, agent)
 
-        # Create a session for the user to interact with
         session = await agent.create_session()
         return server, session
 
 
-async def get_response(session, text):
-    # Send user message and get the agent's response
-    # Parlant typically handles this via events or session interactions
-    event = await session.create_event(kind="message", source="customer", message=text)
-    # Wait for the agent's reply event (implementation details may vary by SDK version)
-    # Example assumes a simple fetch mechanism:
-    responses = await session.list_events(kinds=["message"], sources=["agent"])
-    return responses[-1].message if responses else "No response."
+
 
