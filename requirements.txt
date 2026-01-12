@@ -2,7 +2,7 @@ einops
 huggingface_hub
 langchain
 langchain-huggingface
-litellm
+#litellm
 LiteLLMService
 streamlit
 sentence-transformers
