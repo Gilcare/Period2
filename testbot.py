@@ -1,8 +1,9 @@
 import asyncio
-import litellm
+#import litellm
 import parlant.sdk as p
 import streamlit as st
 from datetime import datetime
+from parlant.adapters.nlp.litellm_service import LiteLLMService
 
 
 HUGGINGFACE_API_KEY = st.secrets.huggingface_api_key
