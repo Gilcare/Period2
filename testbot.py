@@ -97,19 +97,28 @@ async def create_scheduling_journey(server: p.Server, agent: p.Agent) -> p.Journ
    return journey
 
 # Set Up Parlant Server To Run Agent
-async def initialize_parlant() -> None:
-    async with p.Server(nlp_service=p.NLPServices.litellm) as server:
-        agent = await server.create_agent(
+async def initialize_parlant() -> tuple:
+    server = p.Server(nlp_service=p.NLPServices.litellm)
+    await server.start()
+    
+    agent = await server.create_agent(
            name="Kyma",
            description="Is empathetic and calming to the patient."
         )
       
-        await add_domain_glossary(agent)
-        await create_scheduling_journey(server, agent)
+    await add_domain_glossary(agent)
+    await create_scheduling_journey(server, agent)
 
-        session = await agent.create_session()
-        return server, session
+    session = await agent.create_session()
+    return server, session
 
 
-
+async def get_response(session: p.Session, user_input: str) -> str:
+    # Bridge: Sends user input and waits for the agent to process tools/logic
+    await session.create_customer_event(message=user_input)
+    events = await session.consume_all_events()
+    
+    # Extract the text from the agent's message event
+    agent_msgs = [e.data['content'] for e in events if e.kind == 'message' and e.source == 'agent']
+    return agent_msgs[-1] if agent_msgs else "Kyma is reviewing your request..."
 
