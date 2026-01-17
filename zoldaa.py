@@ -148,6 +148,7 @@ def login_signup_page():
 
     st.divider()  
     login, signup = st.tabs(["Login", "Sign Up"])
+    st.image("dope_cover")
 
     with login:
         user = st.text_input("Username")
@@ -420,7 +421,7 @@ def landing_page():
         st.caption ("_❤️AI-Driven Healthcare, Accessible and Affordable for Every lady_",text_alignment="center")
         st.write("Every lady deserves access to quality healthcare, no matter where she lives. We're on a mission to make affordable, world-class care available to women & girls across Africa and beyond. It's time to prioritize women's health, globally.")
         st.image("iron_lady.png")
-        st.caption ("_...built with 💜 ZOLDAA_",text_alignment = "center")
+        st.caption ("_...built with 💜 4rm ZOLDAA_",text_alignment = "center")
         st.write("Together, we can make women's health a priority, and ensure that every woman is empowered with the knowledge and resources she needs to thrive")
 
         st.markdown("""
