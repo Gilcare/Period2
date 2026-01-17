@@ -146,9 +146,10 @@ def login_signup_page():
          unsafe_allow_html=True
      )
 
-    st.divider()  
-    login, signup = st.tabs(["Login", "Sign Up"])
+    st.divider() 
     st.image("dope_cover.png")
+    login, signup = st.tabs(["Login", "Sign Up"])
+    
 
     with login:
         user = st.text_input("Username")
