@@ -179,6 +179,117 @@ def login_signup_page():
                 st.success("Account created")
                 st.rerun()
 
+
+def energy_levels(score):
+    if score <= 3:
+        # Using a span with font-size to enlarge the emoji
+        st.markdown('<p style="text-align: center; font-size: 50px;">🪫</p>', unsafe_allow_html=True)
+    elif score <= 6:
+        st.markdown('<p style="text-align: center; font-size: 30px;">🟡 Moderate</p>', unsafe_allow_html=True)
+    else:
+        st.markdown('<p style="text-align: center; font-size: 50px;">🔋</p>', unsafe_allow_html=True)
+
+
+def fatigue():
+    fatigue_emoji_placeholder = st.empty()
+    st.markdown("Your Energy Levels At The Moment?",text_alignment="center")
+    energy = st.select_slider(label="Energy",
+                              options=[1,2,3,4,5,6,7,8,9,10],
+                              value= 10)
+    
+    # Update the placeholder at the top of the page with the current selection
+    fatigue_emoji_placeholder.markdown(f"## {energy}", text_alignment="center")
+    energy_levels(energy)
+
+    
+
+def mood():
+    # Create a placeholder for the emoji
+    emoji_placeholder = st.empty()
+    st.markdown("What's Your Mood like now?", text_alignment= "center")
+    st.write(" ")
+    mood = st.select_slider(
+                label="Mood",
+                options=["😡","😠","😖","😞","☹️","😕","😓","😔","😒","😑","😐","🙄"],
+                value="😒"
+                )
+
+    # Update the placeholder at the top of the page with the current selection
+    emoji_placeholder.markdown(f"## {mood}", text_alignment="center")
+
+
+def migraine():
+    st.markdown('<p style = "text-align: center; font-size: 30px;">🤦🏾‍♀️</p>',unsafe_allow_html=True)
+    st.markdown("Head Pain Level Right Now?", text_alignment="center")
+    migraine = st.select_slider(
+        label="Migraine",
+        options=[1,2,3,4,5,6,7,8,9,10],
+        value=10
+    )
+
+
+def cramps():
+    st.markdown('<p style = "text-align: center; font-size: 30px;">⚡</p>',unsafe_allow_html=True)
+    st.markdown("How's the cramping?", text_alignment="center")
+    cramps = st.select_slider(
+        label="Cramps",
+        options=[1,2,3,4,5,6,7,8,9,10],
+        value=10
+    )
+
+
+
+def bloating():
+    st.markdown('<p style = "text-align: center; font-size: 30px;">🤢</p>',unsafe_allow_html=True)
+    st.markdown("How's the bloating right now?", text_alignment="center")
+    bloating = st.select_slider(
+        label="Bloated",
+        options=[1,2,3,4,5,6,7,8,9,10],
+        value=10
+    )
+
+
+def sleep():
+    st.markdown('<p style = "text-align: center; font-size: 30px;">💤</p>',unsafe_allow_html=True)
+    st.markdown("How was your rest last night?", text_alignment="center")
+    sleep = st.select_slider(
+        label="Sleep",
+        options=[1,2,3,4,5,6,7,8,9,10],
+        value=10
+    )
+
+
+def food_cravings():
+    st.markdown('<p style = "text-align: center; font-size: 30px;">🍔</p>',unsafe_allow_html=True)
+    st.markdown("Rate your major snack cravings at the moment", text_alignment="center")
+    food_cravings = st.select_slider(
+        label="Food Cravings",
+        options=[1,2,3,4,5,6,7,8,9,10],
+        value=10
+    )
+
+
+def back_pain():
+    st.markdown('<p style = "text-align: center; font-size: 30px;">🙇🏼‍♀️</p>',unsafe_allow_html=True)
+    st.markdown("Back pain level at the moment?", text_alignment="center")
+    back_pain = st.select_slider(
+        label="Back pain",
+        options=[1,2,3,4,5,6,7,8,9,10],
+        value=10
+    )
+
+
+def heavy_bleeding():
+    with st.container():
+        st.markdown('<p style = "text-align: center; font-size: 30px;">🩸</p>',unsafe_allow_html=True)
+        st.markdown("How heavy is your bleeding now?", text_alignment="center")
+        heavy_bleeding = st.select_slider(
+               label="Bleeds",
+               options=[1,2,3,4,5,6,7,8,9,10],
+               value=10
+            )
+
+
 # -------------------------------
 # SYMPTOM SETUP
 # -------------------------------
@@ -222,17 +333,38 @@ def today_tab():
         pick_symptoms()
         return
 
-    st.subheader("Rate today’s symptoms")
+    st.subheader("Journal Symptoms",text_alignment="center")
 
     scores = {}
     for symptom in symptoms:
-        score = st.slider(symptom, 0, 10, 0)
-        scores[symptom] = score
-        st.caption(severity_label(score))
+        if symptom == "Fatigue":
+            fatigue()
+        elif symptom == "Bloating":
+            bloating()
+        elif symptom == "Sleep problems":
+            sleep()
+        elif symptom == "Back pain":
+            back_pain()
+        elif symptom == "Food cravings":
+            food_cravings()
+        elif symptom == "Cramps":
+            cramps()
+        elif symptom == "Heavy bleeding":
+            heavy_bleeding()
+        elif symptom == "Mood swings":
+            mood()
+        elif symptom == "Migraines":
+            migraine()
+        else:
+            score = st.slider(symptom, 0, 10, 0)
+            scores[symptom] = score
+            st.caption(severity_label(score))
 
     if st.button("Save Today"):
-        save_daily_log(st.session_state.username, scores)
+        #save_daily_log(st.session_state.username, scores)
         st.success("Logged successfully")
+
+
 
 def metrics_tab():
     df = load_logs_df(st.session_state.username)
