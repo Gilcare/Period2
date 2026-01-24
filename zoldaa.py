@@ -231,12 +231,14 @@ def migraine():
 def cramps():
     st.markdown('<p style = "text-align: center; font-size: 30px;">⚡</p>',unsafe_allow_html=True)
     st.markdown("How's the cramping?", text_alignment="center")
-    cramps = st.select_slider(
+    # Return value of this widget
+    cramps_val = st.select_slider(
         label="Cramps",
         options=[1,2,3,4,5,6,7,8,9,10],
-        value=10
+        value=10,
+        key = "cramps_slider"
     )
-
+    return cramps_val
 
 
 def bloating():
