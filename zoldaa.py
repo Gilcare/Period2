@@ -363,7 +363,7 @@ def today_tab():
             st.caption(severity_label(score))
 
     if st.button("Save Today"):
-        #save_daily_log(st.session_state.username, scores)
+        save_daily_log(st.session_state.username, scores)
         st.success("Logged successfully")
 
 
